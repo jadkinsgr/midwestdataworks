@@ -1,0 +1,38 @@
+bundle:
+  name: midwestdataworks_bundle
+
+workspace:
+  host: https://dbc-93249de5-d7a7.cloud.databricks.com
+  root_path: /Workspace/Users/midwestdataworks@gmail.com/midwestdataworks/bundle_artifacts
+
+artifacts:
+  notebook_source:
+    type: notebook
+    path: midwestdataworks/BundleDeploymentExample.ipynb
+
+resources:
+  jobs:
+    cars_job:
+      existing_job_id: "1013895210447022"
+      name: midwestdataworks_bundle_job
+      tasks:
+        - task_key: data_bundle_extract
+          description: Runs the car pipeline notebook
+          notebook_task:
+            notebook_path: ${artifacts.notebook_source.path}
+          job_cluster_key: base_cluster
+
+      job_clusters:
+        - job_cluster_key: base_cluster
+          new_cluster:
+            spark_version: 14.3.x-scala2.12
+            node_type_id: i3.xlarge
+            autoscale:
+              min_workers: 1
+              max_workers: 2
+
+environments:
+  default:
+    workspace:
+      host: https://dbc-93249de5-d7a7.cloud.databricks.com
+    mode: production

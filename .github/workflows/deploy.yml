@@ -1,0 +1,29 @@
+name: Deploy Databricks Bundle
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        run: pip install databricks-cli
+
+      - name: Set up Databricks auth
+        env:
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks configure --token <<EOF
+          https://dbc-93249de5-d7a7.cloud.databricks.com
+          $DATABRICKS_TOKEN
+          EOF
+
+      - name: Deploy bundle
+        run: databricks bundle deploy
