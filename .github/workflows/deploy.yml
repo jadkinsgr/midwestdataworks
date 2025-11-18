@@ -13,7 +13,16 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/databricks/cli/main/install.sh | sh
           echo "$HOME/bin" >> $GITHUB_PATH
-          ls -la $HOME/bin/databricks || echo "Databricks CLI not found in $HOME/bin"
+          echo "Checking $HOME/bin:"
+          ls -la $HOME/bin/ || echo "$HOME/bin does not exist"
+          echo "Finding databricks binary:"
+          find $HOME -name databricks -type f 2>/dev/null || echo "Not found in HOME"
+          echo "Current PATH: $PATH"
+      - name: Verify databricks installation
+        run: |
+          echo "PATH after install: $PATH"
+          which databricks || echo "databricks not in PATH"
+          databricks --version || echo "databricks command failed"
       - name: Configure Databricks authentication
         run: |
           mkdir -p ~/.databricks
