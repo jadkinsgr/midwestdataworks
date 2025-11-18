@@ -1,0 +1,12 @@
+resources:
+  jobs:
+    Care_Convene_Job_Bundle:
+      name: Care Convene Job Bundle
+      tasks:
+        - task_key: CareConveneDemoJob
+          notebook_task:
+            notebook_path: /Workspace/Users/midwestdataworks@gmail.com/midwestdataworks/CareConveneDemo/src/demoworkbook
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
