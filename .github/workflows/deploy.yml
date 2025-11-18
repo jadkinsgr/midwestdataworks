@@ -33,7 +33,9 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
       - name: Validate bundle
+        working-directory: CareConveneDemo
         run: databricks bundle validate
 
       - name: Deploy bundle to prod target
+        working-directory: CareConveneDemo
         run: databricks bundle deploy -t prod
