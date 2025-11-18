@@ -10,20 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
       - name: Install Databricks CLI
         run: pip install databricks-cli
 
-      - name: Set up Databricks auth
+      - name: Configure Databricks authentication
+        run: |
+          mkdir -p ~/.databricks
+          cat > ~/.databricks/config << EOF
+          [DEFAULT]
+          host = https://dbc-93249de5-d7a7.cloud.databricks.com/
+          token = $DATABRICKS_TOKEN
+          EOF
         env:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-        run: |
-          databricks configure --token <<EOF
-          https://dbc-93249de5-d7a7.cloud.databricks.com
-          $DATABRICKS_TOKEN
-          EOF
 
-      - name: Deploy bundle
-        run: databricks bundle deploy
+      - name: Validate bundle
+        run: databricks bundle validate
+
+      - name: Deploy bundle to prod target
+        run: databricks bundle deploy -t prod
