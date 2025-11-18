@@ -9,20 +9,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Install Databricks CLI (official)
+      - name: Install Databricks CLI
         run: |
-          curl -fsSL https://raw.githubusercontent.com/databricks/cli/main/install.sh | sh
-          echo "$HOME/bin" >> $GITHUB_PATH
-          echo "Checking $HOME/bin:"
-          ls -la $HOME/bin/ || echo "$HOME/bin does not exist"
-          echo "Finding databricks binary:"
-          find $HOME -name databricks -type f 2>/dev/null || echo "Not found in HOME"
-          echo "Current PATH: $PATH"
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          echo "$HOME/.databricks/bin" >> $GITHUB_PATH
       - name: Verify databricks installation
         run: |
-          echo "PATH after install: $PATH"
-          which databricks || echo "databricks not in PATH"
-          databricks --version || echo "databricks command failed"
+          echo "PATH: $PATH"
+          which databricks
+          databricks --version
       - name: Configure Databricks authentication
         run: |
           mkdir -p ~/.databricks
