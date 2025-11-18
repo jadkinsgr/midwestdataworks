@@ -20,8 +20,8 @@ jobs:
 
       - name: Install Databricks CLI
         run: |
-          pip install --user --upgrade databricks
-          echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+          python3 -m pip install --upgrade pip
+          sudo pip install databricks
 
       - name: Configure Databricks authentication
         run: |
