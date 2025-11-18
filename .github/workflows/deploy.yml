@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Databricks CLI (official installer)
+      - name: Install Databricks CLI (official)
         run: |
           curl -fsSL https://raw.githubusercontent.com/databricks/cli/main/install.sh | sh
           echo "$HOME/bin" >> $GITHUB_PATH
@@ -31,8 +31,12 @@ jobs:
 
       - name: Validate bundle
         working-directory: CareConveneDemo
+        env:
+          PATH: $HOME/bin:$PATH
         run: databricks bundle validate
 
-      - name: Deploy bundle
+      - name: Deploy bundle to prod target
         working-directory: CareConveneDemo
+        env:
+          PATH: $HOME/bin:$PATH
         run: databricks bundle deploy -t prod
