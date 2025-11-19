@@ -1,4 +1,4 @@
-name: Deploy Databricks Bundle
+name: Deploy Databricks Bundle Staging
 on:
   push:
     branches:
