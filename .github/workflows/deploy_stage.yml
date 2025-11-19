@@ -1,0 +1,32 @@
+name: Deploy Databricks Bundle
+on:
+  push:
+    branches:
+      - stage
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+          echo "$HOME/.databricks/bin" >> $GITHUB_PATH
+      - name: Verify databricks installation
+        run: |
+          echo "PATH: $PATH"
+          which databricks
+          databricks --version
+      - name: Validate bundle
+        working-directory: CareConveneDemo
+        env:
+          DATABRICKS_HOST: https://dbc-93249de5-d7a7.cloud.databricks.com
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: databricks bundle validate
+      - name: Deploy bundle to prod target
+        working-directory: CareConveneDemo
+        env:
+          DATABRICKS_HOST: https://dbc-93249de5-d7a7.cloud.databricks.com
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: databricks bundle deploy -t dev
