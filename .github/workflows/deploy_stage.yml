@@ -24,7 +24,7 @@ jobs:
           DATABRICKS_HOST: https://dbc-93249de5-d7a7.cloud.databricks.com
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: databricks bundle validate
-      - name: Deploy bundle to prod target
+      - name: Deploy bundle to dev target
         working-directory: CareConveneDemo
         env:
           DATABRICKS_HOST: https://dbc-93249de5-d7a7.cloud.databricks.com
